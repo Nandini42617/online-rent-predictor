@@ -8,10 +8,8 @@ import joblib
 # We load the model once when the app starts
 deployed_lr = joblib.load('my_first_ml_model.pkl')
 
-def predict_rent(size_of_prop):
-    # The model expects a 2D array: [[size]], it will give the rent of the property
-    prediction = deployed_lr.predict([[size_of_prop]])
-    # Extract the single prediction value and format it, this is the return of price
+def predict_rent(bhk, size_of_prop):
+    prediction = deployed_lr.predict([[bhk, size_of_prop]])
     return f"Estimated Rent: ${prediction[0]:.2f}"
 
 # --- CODE BLOCK: UPDATED CSS FOR TEXT VISIBILITY ---
@@ -59,12 +57,20 @@ with gr.Blocks(css=custom_css, title="Property Rent Predictor") as interface:
         with gr.Row():
             # Left Column: The Predictor Tool
             with gr.Column(scale=2):
-                gr.Markdown("### 📊 Estimation Tool")
-                size_input = gr.Number(label="Please Enter the Size of Your Property for rent (sq ft)")
-                predict_btn = gr.Button("Predict Rent", variant="primary")
-                rent_output = gr.Text(label="Predicted Rent")
+    gr.Markdown("### 📊 Estimation Tool")
+
+    bhk_input = gr.Number(label="Enter Number of BHK")
+    size_input = gr.Number(label="Please Enter the Size of Your Property for rent (sq ft)")
+
+    predict_btn = gr.Button("Predict Rent", variant="primary")
+    rent_output = gr.Text(label="Predicted Rent")
+
+    predict_btn.click(
+        fn=predict_rent,
+        inputs=[bhk_input, size_input],
+        outputs=rent_output
+    )
                 
-                predict_btn.click(fn=predict_rent, inputs=size_input, outputs=rent_output)
             
             # Right Column: Developer Details & Tools
             with gr.Column(scale=1):
