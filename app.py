@@ -70,6 +70,19 @@ with gr.Blocks(css=custom_css, title="Property Rent Predictor") as interface:
         inputs=[bhk_input, size_input],
         outputs=rent_output
     )
+    
+
+    
+    
+
+    
+    
+
+    predict_btn.click(
+        fn=predict_rent,
+        inputs=[bhk_input, size_input],
+        outputs=rent_output
+    )
                 
             
             # Right Column: Developer Details & Tools
